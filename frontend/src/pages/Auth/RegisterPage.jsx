@@ -17,12 +17,15 @@ const RegisterPage = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setError('');
 
     if (password.length < 6) {
-      setError("Password must be at least 6 character long.")
+      const message = "Password must be at least 6 character long.";
+      setError(message);
+      toast.error(message);
+      return;
     }
 
-    setError('');
     setLoading(true);
 
     try {
@@ -56,7 +59,7 @@ const RegisterPage = () => {
               Create an account
             </h1>
             <p className="text-slate-500 text-sm">
-              Start your AI-Powered lerning expreience
+              Start your AI-Powered learning experience
             </p>
           </div>
 
@@ -84,7 +87,7 @@ const RegisterPage = () => {
                   onFocus={() => setFocusedField("username")}
                   onBlur={() => setFocusedField(null)}
                   className="w-full h-12 pl-12 pr-4 border-2 border-slate-200 rounded-xl bg-slate-50/50 text-slate-900 placeholder-slate-400 text-sm font-medium transition-all duration-200 focus:outline-none focus:border-orange-500 focus:bg-white focus:shadow-lg focus:shadow-orange-500/10"
-                  placeholder="yourusername"
+                  placeholder="your username"
                 />
               </div>
             </div>
@@ -139,7 +142,7 @@ const RegisterPage = () => {
                   onChange={(e) => setPassword(e.target.value)}
                   onFocus={() => setFocusedField("password")}
                   onBlur={() => setFocusedField(null)}
-                  className="w-full h-12 pl-12 pr-4 border-2 border-slate-200 rounded-xl bg-slate-50/50 text-slate-900 placeholder-slate-400 text-sm font-medium transition-all duration-200 focus:outline-none focus:border-orange-500 focus:bg-white focus:shadow-lg focus:shadow-orange-500/10"
+                  className="w-full h-12 pl-12 pr-4 border-2 border-slate-200 rounded-xl bg-slate-50/50 text-slate-900 placeholder-slate-400 text-base font-medium font-sans transition-all duration-200 focus:outline-none focus:border-orange-500 focus:bg-white focus:shadow-lg focus:shadow-orange-500/10"
                   placeholder="••••••••"
                 />
               </div>

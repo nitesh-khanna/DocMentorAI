@@ -1,5 +1,5 @@
 import express from 'express';
-import { body } from 'express-validator'
+import { body, validationResult } from 'express-validator'
 
 import {
     register,
@@ -36,9 +36,30 @@ const loginValidation = [
         .withMessage('Password is required')
 ];
 
+const handleValidationErrors = (req, res, next) => {
+    const errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+        const message = errors.array()[0].msg;
+
+        return res.status(400).json({
+            success: false,
+            error: message,
+            message,
+            errors: errors.array().map((error) => ({
+                field: error.path,
+                message: error.msg,
+            })),
+            statusCode: 400
+        });
+    }
+
+    next();
+};
+
 //public routes
-router.post('/register', registerValidation, register);
-router.post('/login', loginValidation, login);
+router.post('/register', registerValidation, handleValidationErrors, register);
+router.post('/login', loginValidation, handleValidationErrors, login);
 
 // Protected route
 router.get('/profile', protect, getProfile);

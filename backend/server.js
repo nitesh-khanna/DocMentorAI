@@ -26,10 +26,22 @@ const app = express();
 // Connect to MongoDB
 connectDB();
 
+const allowedOrigins = [
+    "https://doc-mentor-ai-frontend-1x3a.vercel.app",
+    "http://localhost:5173",
+    "http://127.0.0.1:5173",
+];
+
 // Middleware to handle CORS
 app.use(
     cors({
-        origin: "https://doc-mentor-ai-frontend-1x3a.vercel.app",
+        origin: (origin, callback) => {
+            if (!origin || allowedOrigins.includes(origin)) {
+                return callback(null, true);
+            }
+
+            return callback(new Error("Not allowed by CORS"));
+        },
         methods: ["GET", "POST", "PUT", "DELETE"],
         allowedHeaders: ["Content-Type", "Authorization"],
         credentials: true,
