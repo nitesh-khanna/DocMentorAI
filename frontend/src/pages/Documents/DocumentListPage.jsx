@@ -82,8 +82,19 @@ const DocumentListPage = () => {
     if (!selectedDoc) return;
     setDeleting(true);
     try {
-      await documentService.deleteDocument(selectedDoc._id);
-      toast.success(`'${selectedDoc.title}' deleted.`);
+      const response = await documentService.deleteDocument(selectedDoc._id);
+      const { deletedCounts } = response;
+      let message = `'${selectedDoc.title}' deleted.`;
+      if (deletedCounts) {
+        const parts = [];
+        if (deletedCounts.flashcards > 0) parts.push(`${deletedCounts.flashcards} flashcard set(s)`);
+        if (deletedCounts.quizzes > 0) parts.push(`${deletedCounts.quizzes} quiz(es)`);
+        if (deletedCounts.chatHistories > 0) parts.push(`${deletedCounts.chatHistories} chat history(ies)`);
+        if (parts.length > 0) {
+          message += ` Also removed: ${parts.join(', ')}.`;
+        }
+      }
+      toast.success(message);
       setIsDeleteModalOpen(false);
       setSelectedDoc(null);
       setDocuments(documents.filter((d) => d._id !== selectedDoc._id));
